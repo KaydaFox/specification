@@ -1,10 +1,35 @@
 openapi: 3.0.3
 info:
   title: groups
-  version: '1.0'
+  version: "1.0"
   description: Group Docs Here
 paths:
   /groups:
+    get:
+      summary: Search groups
+      description: Search the API for groups
+      operationId: searchGroups
+      parameters:
+        - schema:
+            type: string
+            minLength: 0
+          in: query
+          name: query
+          description: Searches for groups with names containing the query. If no query is provided, the API will return a bunch of random groups
+        - $ref: ../parameters.yaml#/number
+        - $ref: ../parameters.yaml#/offset
+      tags:
+        - groups
+      responses:
+        "200":
+          $ref: ../responses/groups/GroupSearchResponse.yaml
+        "400":
+          $ref: ../responses/groups/InvalidGroupSearchError.yaml
+        "401":
+          $ref: ../responses/MissingCredentialsError.yaml
+      security:
+        - authCookie: []
+
     post:
       summary: Create Group
       description: Creates a Group and returns a Group object. **Requires VRC+ Subscription.**
@@ -17,13 +42,13 @@ paths:
             schema:
               $ref: ../requests/CreateGroupRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}':
+  "/groups/{groupId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -40,11 +65,11 @@ paths:
           required: false
           description: Include roles for the Group object. Defaults to false.
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -60,11 +85,11 @@ paths:
             schema:
               $ref: ../requests/UpdateGroupRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -75,15 +100,15 @@ paths:
         - groups
       description: Deletes a Group.
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/DeleteGroupSuccess.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/announcement':
+  "/groups/{groupId}/announcement":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -96,11 +121,11 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupAnnouncementResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -116,11 +141,11 @@ paths:
             schema:
               $ref: ../requests/CreateGroupAnnouncementRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupAnnouncementResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -131,15 +156,15 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/DeleteGroupAnnouncementSuccess.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/auditLogs':
+  "/groups/{groupId}/auditLogs":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -154,15 +179,15 @@ paths:
         - $ref: ../parameters.yaml#/startDate
         - $ref: ../parameters.yaml#/endDate
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupAuditLogListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/bans':
+  "/groups/{groupId}/bans":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -175,11 +200,11 @@ paths:
         - $ref: ../parameters.yaml#/number
         - $ref: ../parameters.yaml#/offset
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupMemberListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -195,15 +220,15 @@ paths:
             schema:
               $ref: ../requests/BanGroupMemberRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupMemberResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/bans/{userId}':
+  "/groups/{groupId}/bans/{userId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/userId
@@ -214,15 +239,15 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupMemberResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/galleries':
+  "/groups/{groupId}/galleries":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     post:
@@ -237,15 +262,15 @@ paths:
             schema:
               $ref: ../requests/CreateGroupGalleryRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupGalleryResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/galleries/{groupGalleryId}':
+  "/groups/{groupId}/galleries/{groupGalleryId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/groupGalleryId
@@ -265,11 +290,11 @@ paths:
             type: boolean
           description: If specified, only returns images that have been approved or not approved.
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupGalleryImageListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -285,11 +310,11 @@ paths:
             schema:
               $ref: ../requests/UpdateGroupGalleryRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupGalleryResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -300,15 +325,15 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/DeleteGroupGallerySuccess.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/galleries/{groupGalleryId}/images':
+  "/groups/{groupId}/galleries/{groupGalleryId}/images":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/groupGalleryId
@@ -324,15 +349,15 @@ paths:
             schema:
               $ref: ../requests/AddGroupGalleryImageRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupGalleryImageResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/galleries/{groupGalleryId}/images/{groupGalleryImageId}':
+  "/groups/{groupId}/galleries/{groupGalleryId}/images/{groupGalleryImageId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/groupGalleryId
@@ -364,17 +389,17 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/DeleteGroupGalleryImageSuccess.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '403':
+        "403":
           $ref: ../responses/groups/GroupGalleryImageDeleteForbiddenError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/invites':
+  "/groups/{groupId}/invites":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -384,13 +409,13 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupMemberListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '403':
+        "403":
           $ref: ../responses/groups/GroupNotMemberError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -406,17 +431,17 @@ paths:
             schema:
               $ref: ../requests/CreateGroupInviteRequest.yaml
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: User <displayName> is already invited
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/invites/{userId}':
+  "/groups/{groupId}/invites/{userId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/userId
@@ -427,13 +452,13 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           description: OK
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/join':
+  "/groups/{groupId}/join":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     post:
@@ -443,17 +468,17 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupMemberResponse.yaml
-        '400':
+        "400":
           $ref: ../responses/groups/GroupAlreadyMemberError.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/leave':
+  "/groups/{groupId}/leave":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     post:
@@ -463,15 +488,15 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           description: OK
-        '403':
+        "403":
           $ref: ../responses/groups/GroupNotMemberError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/members':
+  "/groups/{groupId}/members":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -486,17 +511,17 @@ paths:
         - $ref: ../parameters.yaml#/number
         - $ref: ../parameters.yaml#/offset
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupMemberListResponse.yaml
-        '400':
+        "400":
           $ref: ../responses/users/UsersInvalidSearchError.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/members/{userId}':
+  "/groups/{groupId}/members/{userId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/userId
@@ -507,11 +532,11 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupLimitedMemberResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -527,11 +552,11 @@ paths:
             schema:
               $ref: ../requests/UpdateGroupMemberRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupLimitedMemberResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -542,17 +567,17 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           description: OK
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '403':
+        "403":
           $ref: ../responses/groups/GroupNotMemberError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/members/{userId}/roles/{groupRoleId}':
+  "/groups/{groupId}/members/{userId}/roles/{groupRoleId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/userId
@@ -564,11 +589,11 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupRoleIDListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -579,15 +604,15 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupRoleIDListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/permissions':
+  "/groups/{groupId}/permissions":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -597,17 +622,17 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupPermissionListResponse.yaml
-        '400':
+        "400":
           $ref: ../responses/users/UsersInvalidSearchError.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/requests':
+  "/groups/{groupId}/requests":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -617,11 +642,11 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupMemberListResponse.yaml
-        '403':
+        "403":
           $ref: ../responses/groups/GroupNotMemberError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -632,17 +657,17 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           description: OK
-        '400':
+        "400":
           description: You can't cancel a join request if you didn't request to join․
-        '403':
+        "403":
           $ref: ../responses/groups/GroupNotMemberError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/requests/{userId}':
+  "/groups/{groupId}/requests/{userId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/userId
@@ -653,11 +678,11 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           description: OK
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       requestBody:
         content:
@@ -666,7 +691,7 @@ paths:
               $ref: ../requests/RespondGroupJoinRequest.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/roles':
+  "/groups/{groupId}/roles":
     parameters:
       - $ref: ../parameters.yaml#/groupId
     get:
@@ -676,11 +701,11 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupRoleListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
@@ -696,15 +721,15 @@ paths:
             schema:
               $ref: ../requests/CreateGroupRoleRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupRoleResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotFoundError.yaml
       security:
         - authCookie: []
-  '/groups/{groupId}/roles/{groupRoleId}':
+  "/groups/{groupId}/roles/{groupRoleId}":
     parameters:
       - $ref: ../parameters.yaml#/groupId
       - $ref: ../parameters.yaml#/groupRoleId
@@ -720,9 +745,9 @@ paths:
             schema:
               $ref: ../requests/UpdateGroupRoleRequest.yaml
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupRoleListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
       security:
         - authCookie: []
@@ -733,11 +758,11 @@ paths:
       tags:
         - groups
       responses:
-        '200':
+        "200":
           $ref: ../responses/groups/GroupRoleListResponse.yaml
-        '401':
+        "401":
           $ref: ../responses/MissingCredentialsError.yaml
-        '404':
+        "404":
           $ref: ../responses/groups/GroupNotMemberError.yaml
       security:
         - authCookie: []
